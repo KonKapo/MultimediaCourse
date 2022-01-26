@@ -34,10 +34,6 @@ d_doubleStress(:) = b*Prevd(N+1:N+subframe_size);
 e = d-d_doubleStress;
 
 %% 3.1.17 Synthesis
-for k=1:subframe_size
-    d_Stress(k) = e(k) + d_doubleStress(k);
-end
-
-
+d_Stress(:) = e(:) + b*d_doubleStress(:);
 end
 
