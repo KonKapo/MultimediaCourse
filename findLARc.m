@@ -114,13 +114,13 @@ end
 CurrFrmSTResd = frame-d_1D';
 % s_est = conv(frame,w,'same');
 
-% Plot
-figure(1)
-clf
-plot(frame)
-hold on
-plot(d_1D)
-legend('s_est','frame')
-title('s Estimation and frame comparison')
+% % Plot
+% figure(1)
+% clf
+% plot(frame)
+% hold on
+% plot(d_1D)
+% legend('s_est','frame')
+% title('s Estimation and frame comparison')
 end
 

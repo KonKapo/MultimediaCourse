@@ -27,10 +27,10 @@ R = R(81:end);
 
 % 3)
 % b = R(N)/(sum(Prevd((end-N):(end-N+39))^2))
-b = R(N)/sum(Prevd(N:N+subframe_size).*Prevd(N:N+subframe_size));
+b = R(N)/sum(Prevd(N:N+subframe_size-1).*Prevd(N:N+subframe_size-1));
 
 %% 3.1.16 page 27 Prediction
-d_doubleStress(:) = b*Prevd(N+1:N+subframe_size);
+d_doubleStress(:) = b*Prevd(N:N+subframe_size-1);
 e = d-d_doubleStress;
 
 %% 3.1.17 Synthesis
