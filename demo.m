@@ -5,9 +5,9 @@
 for i = 1:800
     [LARc,  CurrFrmSTResd]= RPE_frame_ST_coder(frame((i-1)*160+1:(i*160)));
     if i == 1
-        [Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,CurrFrmSTResd);
+        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,CurrFrmSTResd);
     else
-        [Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd');
+        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd');
     end
     if i == 1
         s0((i-1)*160+1:(i*160)) = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmSTResd,CurrFrmSTResd);
