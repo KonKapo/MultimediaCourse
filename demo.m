@@ -7,12 +7,12 @@ for i = 1:800
     if i == 1
         [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,CurrFrmSTResd);
     else
-        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd');
+        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd);
     end
     if i == 1
         s0((i-1)*160+1:(i*160)) = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmSTResd,CurrFrmSTResd);
     else
-        s0((i-1)*160+1:(i*160)) = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmSTResd,PrevFrmSTResd');
+        s0((i-1)*160+1:(i*160)) = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmSTResd,PrevFrmSTResd);
     end
     PrevFrmSTResd = CurrFrmSTResd;
 end
