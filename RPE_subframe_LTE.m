@@ -17,23 +17,10 @@ d_Stress = zeros(subframe_size, 1);
 
 %% 3.1.13 page 25 Estimation
 % 1)
-% for lamda = subframe_size:lamda_max
-%     R(lamda-subframe_size+1) = sum(d(:).*Prevd(lamda-subframe_size+1:lamda));    
-% end
 R = xcorr(Prevd,d, 80);
 R = R(81:end);
 % 2)
 [~,N] = max(R);
-
 % 3)
-% b = R(N)/(sum(Prevd((end-N):(end-N+39))^2))
 b = R(N)/sum(Prevd(N:N+subframe_size-1).*Prevd(N:N+subframe_size-1));
-
-%% 3.1.16 page 27 Prediction
-d_doubleStress(:) = b*Prevd(N:N+subframe_size-1);
-e = d-d_doubleStress;
-
-%% 3.1.17 Synthesis
-d_Stress(:) = e(:) + b*d_doubleStress(:);
 end
-
