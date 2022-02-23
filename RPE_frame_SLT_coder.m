@@ -24,7 +24,7 @@ elseif(DLB(3)<b)
 end
 %% 3.1.16 sub-segment number 1
 CurrFrmSTResd(1:40)= bc(1)*prevd(Nc(1):Nc(1)+39)';
-prevd = [PrevFrmSTResd(80:160) CurrFrmSTResd(1:40)'];
+prevd = [PrevFrmSTResd(80:160)' CurrFrmSTResd(1:40)'];
 
 %% 3.1.15 sub-segment number 2
 [N,b] = RPE_subframe_LTE(s0(41:80),prevd');
@@ -40,7 +40,7 @@ elseif(DLB(3)<b)
 end
 %% 3.1.16 sub-segment number 2
 CurrFrmSTResd(41:80)= bc(2)*prevd(Nc(2):Nc(2)+39);
-prevd = [PrevFrmSTResd(120:160) CurrFrmSTResd(1:80)'];
+prevd = [PrevFrmSTResd(120:160)' CurrFrmSTResd(1:80)'];
 
 %% 3.1.15 sub-segment number 3
 [N,b] = RPE_subframe_LTE(s0(81:120),prevd');
@@ -81,4 +81,3 @@ CurrFrmExFull(:) = s0 - CurrFrmSTResd;
 % title('e')
 
 end
-
