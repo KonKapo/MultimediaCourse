@@ -1,8 +1,9 @@
 function [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s0,PrevFrmResd)
 %[LARc, CurrFrmSTResd] = RPE_frame_SLT_coder(s0, PrevFrmSTResd)to add
-% Additions 3.1.9 implementation 
+% Additions 3.1.9 implementation
 
 % Short Term Analysis Coder
+
 %% init vars
 frame = s0;
 l = length(frame);
@@ -38,7 +39,7 @@ for i=1:8
     else
         LAR(i)=sign(r(i))*(8*abs(r(i)) - 6.375);
     end
-
+    
     z = A(i)*LAR(i)+B(i);
     integ=abs(floor(z));
     fract=abs(z)-abs(integ);
@@ -83,16 +84,20 @@ elseif(LARc(8)>3)
     LARc(8)=3;
 end
 
+[PrevLARc, ~] = RPE_frame_ST_coder(s0);
+
 % LARc
 for i=1:8
     z = LARc;
+    PrevZ = PrevLARc;
     %% 3.1.8 page 23
     LAR_doubleStress(i) = (z(i) - B(i))/A(i);
+    PrevLAR_doubleStress(i) = (PrevZ(i) - B(i))/A(i);
     %% 3.1.9
-    LAR_Stress(i,1) = 0.75*x + 0.25*LAR_doubleStress(i);
-    LAR_Stress(i,2) = 0.5*x + 0.5*LAR_doubleStress(i);
-    LAR_Stress(i,3) = 0.25*x + 0.75*LAR_doubleStress(i);
-    LAR_Stress(i,4) = 0*x + 0.25*LAR_doubleStress(i);
+    LAR_Stress(i,1) = 0.75*PrevLAR_doubleStress(i) + 0.25*LAR_doubleStress(i);
+    LAR_Stress(i,2) = 0.5*PrevLAR_doubleStress(i) + 0.5*LAR_doubleStress(i);
+    LAR_Stress(i,3) = 0.25*PrevLAR_doubleStress(i) + 0.75*LAR_doubleStress(i);
+    LAR_Stress(i,4) = 0*PrevLAR_doubleStress(i) + 0.25*LAR_doubleStress(i);
     %% 3.1.10
     % equation (3.5)
     for k = 1:l
@@ -122,20 +127,19 @@ for k = 1:l
         elseif (k<=12)
             d(i,k) = d(i-1,k) + r(i-1,1) * u(i-1,k-1);
             u(i,k) = u(i-1,k) + r(i-1,1) * d(i-1,k);
-        esleif (k>12 && k<=27)
+        elseif (k>12 && k<=27)
             d(i,k) = d(i-1,k) + r(i-1,2) * u(i-1,k-1);
             u(i,k) = u(i-1,k) + r(i-1,2) * d(i-1,k);
-        esleif (k>27 && k<=40)
+        elseif (k>27 && k<=40)
             d(i,k) = d(i-1,k) + r(i-1,3) * u(i-1,k-1);
             u(i,k) = u(i-1,k) + r(i-1,4) * d(i-1,k);
-        esle
+        else
             d(i,k) = d(i-1,k) + r(i-1,4) * u(i-1,k-1);
             u(i,k) = u(i-1,k) + r(i-1,4) * d(i-1,k);
         end
         
     end
-end
-d_1D(k) = d(9,k);
+    d_1D(k) = d(9,k);
 end
 CurrFrmSTResd = frame-d_1D';
 end
