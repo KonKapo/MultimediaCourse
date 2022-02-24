@@ -1,7 +1,10 @@
 function [LARc, CurrFrmSTResd] = RPE_frame_ST_coder(s0)
 % Short Term Analysis Coder
 %% init vars
-frame = s0;
+frame = preprocessing(s0);
+frame = postprocessing(frame);
+
+%frame = s0;
 l = length(frame);
 d_1D = zeros(1,l);
 d = zeros(9,l);
@@ -18,9 +21,7 @@ for k = 1:9
     ACF(k)=sum(frame(k:end).*frame(1:end-k+1));                             %ACF calculation 3.1.4
 end
 R = ACF(1:end-1);
-for i=1:7
-    R = [R; circshift(ACF(1:end-1),i)];
-end
+R = toeplitz(R);
 r = ACF(2:end)';
 w = mldivide(R,r);
 r = poly2rc([1 -w(1) -w(2) -w(3) -w(4) -w(5) -w(6) -w(7) -w(8)]);

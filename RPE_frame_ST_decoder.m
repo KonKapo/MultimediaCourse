@@ -71,9 +71,6 @@ for k = 1:l
 end
 
 %% 3.2.4
-sro = s_r_1D;
-s0=sro;
-s0 = postprocessing(sro);
-s0=s0/(2*max(abs(s0)));
+s0=s_r_1D/max(abs(s_r_1D));
 end
 
