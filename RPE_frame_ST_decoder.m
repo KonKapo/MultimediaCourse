@@ -30,7 +30,7 @@ for i=1:8
         r(i)=sign(LAR_Stress(i))*(0.125*abs(LAR_Stress(i)) + 0.796875);
     end
 end
-
+r = -rc2poly(r);
 for k = 1:l
     %% 3.1.11
     d(1,k) = frame(k);
@@ -47,30 +47,9 @@ for k = 1:l
     d_1D(k) = d(9,k);
 end
 
-% figure(2)
-% plot(d_1D)
-% hold on
-% plot(frame)
-% hold on
-% legend('d_1D','frame')
-% title('frame, d_1D')
-
-for k = 1:l
-    s_r(1,k) = d_1D(k);
-    for i=1:8
-        if(k==1)
-            s_r(i+1,k)=s_r(i,k);
-            v(10-i,k)=r(9-i) * s_r(i+1,k);
-        elseif(k~=1)
-            s_r(i+1,k) = s_r(i,k) - (r(9-i) * v(9-i,k-1));
-            v(10-i,k) = v(9-i,k-1) + (r(9-i) * s_r(i+1,k));
-        end
-    end
-    s_r_1D(k) = s_r(9,k);
-    v(1,k) = s_r(9,k);
-end
-
 %% 3.2.4
-s0=s_r_1D/max(abs(s_r_1D));
+s0 = d_1D+PrevFrmResd';
+s0 = postprocessing(s0);
+%s0=s_r_1D/max(abs(s_r_1D));
 end
 

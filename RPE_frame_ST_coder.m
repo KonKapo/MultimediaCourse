@@ -2,7 +2,6 @@ function [LARc, CurrFrmSTResd] = RPE_frame_ST_coder(s0)
 % Short Term Analysis Coder
 %% init vars
 frame = preprocessing(s0);
-frame = postprocessing(frame);
 
 %frame = s0;
 l = length(frame);
@@ -24,8 +23,9 @@ R = ACF(1:end-1);
 R = toeplitz(R);
 r = ACF(2:end)';
 w = mldivide(R,r);
+r2=w;
 r = poly2rc([1 -w(1) -w(2) -w(3) -w(4) -w(5) -w(6) -w(7) -w(8)]);
-r = r/(max(abs(r)));
+
 for i=1:8
     if(abs(r(i))<0.675)
         LAR(i) = r(i);
@@ -95,8 +95,8 @@ for i=1:8
         r(i)=sign(LAR_Stress(i))*(0.125*abs(LAR_Stress(i)) + 0.796875);
     end
 end
-r = rc2poly(r);
-
+r = -rc2poly(r);
+mean(r(2:end)-r2');
 for k = 1:l
     %% 3.1.11
     d(1,k) = frame(k);

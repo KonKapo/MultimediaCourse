@@ -6,15 +6,14 @@ for i = 1:800
     [LARc, CurrFrmSTResd] = RPE_frame_ST_coder(frame((i-1)*160+1:(i*160)));
     s0((i-1)*160+1:(i*160)) = RPE_frame_ST_decoder(LARc, CurrFrmSTResd);
 end
-max(abs(frame))
-audiowrite('car2.wav',s0*abs(max(frame)),Fs)
+audiowrite('car2.wav',s0,Fs)
 
-figure(3)
-plot(s0*max(abs(frame)))
+figure(1)
+plot(s0)
 hold on
 plot(frame)
 legend('s0','frame')
 title('Decoded signal and frame comparison')
 e = frame - s0*abs(max(frame));
-figure()
-std(e)
+figure(2)
+plot(e)
