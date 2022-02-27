@@ -1,12 +1,13 @@
 [frame, Fs] = audioread('car.wav');
 s0 = zeros(128000,1);
-for i = 1:800
+for i = 3:7
     CurrFrmSTResd = frame(((i-1)*160+1:(i*160)));
+    CurrFrmExFull =  zeros(160,1);
     if i == 1
         PrevFrmSTResd = zeros(1,160)';
-        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd);
+        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_coder(CurrFrmSTResd,PrevFrmSTResd);
     else
-        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_SLT_coder(CurrFrmSTResd,PrevFrmSTResd);
+        [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]= RPE_frame_coder(CurrFrmSTResd,PrevFrmSTResd);
     end
     s0((i-1)*160+1:(i*160)) = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmExFull,CurrFrmSTResd);
     PrevFrmSTResd = CurrFrmSTResd;
