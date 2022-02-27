@@ -13,7 +13,7 @@ for i = 1:800
 end
 audiowrite('car2.wav',s0,Fs)
 figure(3)
-plot(s0*abs(max(frame)))
+plot(s0*abs(max(frame))/2)
 hold on
 plot(frame)
 legend('s0','frame')
