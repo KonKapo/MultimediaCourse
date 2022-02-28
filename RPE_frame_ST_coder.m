@@ -5,9 +5,7 @@ frame = preprocessing(s0);
 
 %frame = s0;
 l = length(frame);
-d_1D = zeros(1,l);
-d = zeros(9,l);
-u = zeros(9,l);
+s_pred = zeros(1,l);
 ACF = zeros(1,9);
 LAR = zeros(8,1);
 LARc = zeros(8,1);
@@ -45,39 +43,6 @@ for i=1:8
     end
 end
 
-if(LARc(1)<-32)
-    LARc(1)=-32;
-elseif(LARc(2)<-32)
-    LARc(2)=-32;
-elseif(LARc(3)<-16)
-    LARc(3)=-16;
-elseif(LARc(4)<-16)
-    LARc(4)=-16;
-elseif(LARc(5)<-8)
-    LARc(5)=-8;
-elseif(LARc(6)<-8)
-    LARc(6)=-8;
-elseif(LARc(7)<-4)
-    LARc(7)=-4;
-elseif(LARc(8)<-4)
-    LARc(8)=-4;
-elseif(LARc(1)>31)
-    LARc(1)=31;
-elseif(LARc(2)>31)
-    LARc(2)=31;
-elseif(LARc(3)>15)
-    LARc(3)=15;
-elseif(LARc(4)>15)
-    LARc(4)=15;
-elseif(LARc(5)>7)
-    LARc(5)=7;
-elseif(LARc(6)>7)
-    LARc(6)=7;
-elseif(LARc(7)>3)
-    LARc(7)=3;
-elseif(LARc(8)>3)
-    LARc(8)=3;
-end
 % LARc
 for i=1:8
     z = LARc;
@@ -97,31 +62,16 @@ for i=1:8
 end
 r = -rc2poly(r);
 mean(r(2:end)-r2');
-for k = 1:l
-    %% 3.1.11
-    d(1,k) = frame(k);
-    u(1,k) = frame(k);
-    for i=2:9
-        if (k == 1)
-            d(i,k) = d(i-1,k);
-            u(i,k) = u(i-1,k);
-        else
-            d(i,k) = d(i-1,k) + r(i-1) * u(i-1,k-1);
-            u(i,k) = u(i-1,k) + r(i-1) * d(i-1,k);
+
+for i = 1:160
+    for k=2:9
+        if (i-k-1>0)
+            s_pred(i) = s_pred(i) + r(k)*frame(i-k-1);
         end
     end
-    d_1D(k) = d(9,k);
 end
-CurrFrmSTResd = frame-d_1D';
-% s_est = conv(frame,w,'same');
 
-% % Plot
-% figure(1)
-% clf
-% plot(frame)
-% hold on
-% plot(d_1D)
-% legend('s_est','frame')
-% title('s Estimation and frame comparison')
+
+CurrFrmSTResd = frame-s_pred';
 end
 

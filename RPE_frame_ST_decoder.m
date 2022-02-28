@@ -4,12 +4,7 @@ function [s0] = RPE_frame_ST_decoder(LARc, PrevFrmResd)
 %% init vars
 frame = PrevFrmResd;
 l = length(frame);
-d_1D = zeros(1,l);
-d = zeros(9,l);
-u = zeros(9,l);
-s_r = zeros(8,l);
-v = zeros(9,l);
-s_r_1D = zeros(1,l);
+s_pred = zeros(1,l);
 A = [20 20 20 20 13.637 15 8.334 8.824];
 B = [0 0 4 -5 0.184 -3.5 -0.666 -2.235];
 r = zeros(8,1);
@@ -31,25 +26,19 @@ for i=1:8
     end
 end
 r = -rc2poly(r);
-for k = 1:l
-    %% 3.1.11
-    d(1,k) = frame(k);
-    u(1,k) = frame(k);
-    for i=2:9
-        if (k == 1)
-            d(i,k) = d(i-1,k);
-            u(i,k) = u(i-1,k) ;
-        else
-            d(i,k) = d(i-1,k) + r(i-1) * u(i-1,k-1) ;
-            u(i,k) = u(i-1,k) + r(i-1) * d(i-1,k) ;
+
+for i = 1:160
+    for k=2:9
+        if (i-k-1>0)
+            s_pred(i) = s_pred(i) + r(k)*frame(i-k-1);
         end
+            s_pred(i)= s_pred(i)+frame(i);
     end
-    d_1D(k) = d(9,k);
 end
 
+
 %% 3.2.4
-s0 = d_1D+PrevFrmResd';
+s0 = s_pred+PrevFrmResd';
 s0 = postprocessing(s0);
-%s0=s_r_1D/max(abs(s_r_1D));
 end
 
