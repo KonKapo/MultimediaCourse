@@ -1,7 +1,4 @@
 function [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s0,PrevFrmResd,PrevLARc)
-% [LARc,Nc,bc,CurrFrmExFull,CurrFrmSTResd]  = RPE_frame_SLT_coder(s0, PrevFrmResd);
-
-%[LARc, CurrFrmSTResd] = RPE_frame_SLT_coder(s0, PrevFrmSTResd)to add
 % Additions 3.1.9 implementation
 
 % Short Term Analysis Coder
@@ -14,8 +11,6 @@ ACF = zeros(1,9);
 LAR = zeros(8,1);
 LARc = zeros(8,1);
 LAR_Stress = zeros(8,4);
-FrmBitStrm = zeros(260,1);
-r = zeros(8,4);
 A = [20 20 20 20 13.637 15 8.334 8.824];
 B = [0 0 4 -5 0.184 -3.5 -0.666 -2.235];
 
@@ -47,7 +42,6 @@ for i=1:8
         LARc(i)=round(z);
     end
 end
-[PrevLARc, ~] = RPE_frame_ST_coder(s0); %na figei lathos
 % LARc
 for i=1:8
     z = LARc;
