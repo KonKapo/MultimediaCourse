@@ -25,20 +25,9 @@ for i=1:8
         r(i)=sign(LAR_Stress(i))*(0.125*abs(LAR_Stress(i)) + 0.796875);
     end
 end
-r = -rc2poly(r);
-
-for i = 1:160
-    for k=2:9
-        if (i-k-1>0)
-            s_pred(i) = s_pred(i) + r(k)*frame(i-k-1);
-        end
-            s_pred(i)= s_pred(i)+frame(i);
-    end
-end
-
-
+r = rc2poly(r);
+s_pred = filter(r, 1, frame')+frame; 
 %% 3.2.4
-s0 = s_pred+PrevFrmResd';
-s0 = postprocessing(s0);
+s0 = postprocessing(s_pred);
 end
 

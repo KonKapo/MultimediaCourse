@@ -60,18 +60,8 @@ for i=1:8
         r(i)=sign(LAR_Stress(i))*(0.125*abs(LAR_Stress(i)) + 0.796875);
     end
 end
-r = -rc2poly(r);
-mean(r(2:end)-r2');
-
-for i = 1:160
-    for k=2:9
-        if (i-k-1>0)
-            s_pred(i) = s_pred(i) + r(k)*frame(i-k-1);
-        end
-    end
-end
-
-
+r = rc2poly(r);
+s_pred = filter(r, 1, frame'); 
 CurrFrmSTResd = frame-s_pred';
 end
 
