@@ -1,4 +1,6 @@
 function [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s0,PrevFrmResd,PrevLARc)
+[PrevLARc, CurrFrmSTResd] = RPE_frame_ST_coder(PrevFrmResd); %na fygei
+
 % Additions 3.1.9 implementation
 
 % Short Term Analysis Coder
@@ -250,13 +252,21 @@ for l = 1:4
     end
 end
 
+%synthesis
+x_tone2 = x_tone./2^15;
+for j = 0:3    
+    for l = 1:4
+        x(l+40*j:3:40*j+40-4+l) = x_tone2(l,:)'* x_max;
+    end
+end
+
 % 1.7 Bitstream sequence page 13
 LARb = zeros(36,1); % 8 LARs with 6 6 5 5 4 4 3 3 bits
 Nb = zeros(28,1); % 4 subframes with 7 bits each b37-b43 b93-b99 b149-b155 b205-b211
 bb = zeros(8,1); % 4 subframes with 2 bits each b44-b45 b100-b101 b156-b157 b212-b213
 Mb = zeros(8,1); % 4 subframes with 2 bits each b46-b47 b102-b103 b158-b159 b214-b215
 xMaxb = zeros(24,1); % 4 subframes with 6 bits each b48-b53 b104-b109 b160-b165 b216-b221
-xb = zeros(4*3*13,1); % 4 subframes with 12 pulses 3 bits each b54-b92 b110-b148 b166-b204 b222-b260
+xb = zeros(4*3*13,1); % 4 subframes with 13 pulses 3 bits each b54-b92 b110-b148 b166-b204 b222-b260
 
 LARb(1:6) = bitget(LARc(1),6:-1:1,'int16');
 LARb(7:12) = bitget(LARc(2),6:-1:1,'int16');
@@ -331,5 +341,5 @@ FrmBitStrm=[LARb'...
     Nb(1:7)' bb(1:2)' Mb(1:2)' xMaxb(1:6)' xb(1:39)'...
     Nb(8:14)' bb(3:4)' Mb(3:4)' xMaxb(7:12)' xb(40:78)'...
     Nb(15:21)' bb(5:6)' Mb(5:6)' xMaxb(13:18)' xb(79:117)'...
-    Nb(22:28)' bb(7:8)' Mb(7:8)' xMaxb(19:24)' xb(118:156)']
+    Nb(22:28)' bb(7:8)' Mb(7:8)' xMaxb(19:24)' xb(118:156)'];
 end
