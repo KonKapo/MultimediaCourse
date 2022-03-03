@@ -15,5 +15,9 @@ for k = 1:80
 end
 [~,N] = max(R);
 R2 = sum(Prevd(1+end-39-N:40+end-39-N).*Prevd(1+end-39-N:40+end-39-N));
-b = R(N)/R2;
+if R2~=0
+    b = R(N)/R2;
+else
+    b=0;
+end
 end
