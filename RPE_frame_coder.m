@@ -23,7 +23,7 @@ for j = 0:3
         xm(l)=sum(x(l+40*j:3:40*j+40-4+l).^2);
     end
     [~, Mc(j+1)] = max(xm);
-    xmax = max(abs(x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))));
+    xmax = ceil(max(abs(x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1))))));
     if(xmax>=0 && xmax<=511)
         x_maxc = floor((xmax)/32);
         x_max = (x_maxc+1)*32-1;
@@ -46,6 +46,7 @@ for j = 0:3
         x_maxc = floor((xmax-16383)/2048)+56;
         x_max = (x_maxc+1)*2048-1;
     end
+    x_tonei(:,j+1)=x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))';
     x_tone(j+1,:) = x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))'/x_max;
     xMax(j+1) = x_maxc;
 end
@@ -55,17 +56,17 @@ for l = 1:4
     for j = 1:13
         if(x_tonec(l,j)<=-24577&&x_tonec(l,j)>=-32767)
             x_tonec(l,j) = -28672;
-        elseif(x_tonec(l,j)>=-24576 && x_tonec(l,j)<=-16385)
+        elseif(x_tonec(l,j)>=-24576 && x_tonec(l,j)<=-16395)
             x_tonec(l,j) = -20480;
-        elseif(x_tonec(l,j)>=-16384 && x_tonec(l,j)<=-8193)
+        elseif(x_tonec(l,j)>=-16394 && x_tonec(l,j)<=-8193)
             x_tonec(l,j) = -12288;
         elseif(x_tonec(l,j)>=-8192 && x_tonec(l,j)<=-1)
             x_tonec(l,j) = -4096;
         elseif(x_tonec(l,j)>=0 && x_tonec(l,j)<=8191)
             x_tonec(l,j) = 4096;
-        elseif(x_tonec(l,j)>=8192 && x_tonec(l,j)<=16384)
+        elseif(x_tonec(l,j)>=8192 && x_tonec(l,j)<=16394)
             x_tonec(l,j) = 12288;
-        elseif(x_tonec(l,j)>=16385 && x_tonec(l,j)<=24575)
+        elseif(x_tonec(l,j)>=16395 && x_tonec(l,j)<=24575)
             x_tonec(l,j) = 20480;
         elseif(x_tonec(l,j)>=24576 && x_tonec(l,j)<=32767)
             x_tonec(l,j) = 28672;
@@ -107,72 +108,28 @@ xMaxb(7:12) = bitget(xMax(2),6:-1:1,'int16');
 xMaxb(13:18) = bitget(xMax(3),6:-1:1,'int16');
 xMaxb(19:24) = bitget(xMax(4),6:-1:1,'int16');
 
-%table 3.6 page 31
 for l = 1:4
     for j = 1:13
         if(x_tonec(l,j)==-28672)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(0,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(0,3:-1:1,'int16');
         elseif(x_tonec(l,j)==-20480)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(4,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(4,3:-1:1,'int16');
         elseif(x_tonec(l,j)==-12288)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(2,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(2,3:-1:1,'int16');
         elseif(x_tonec(l,j)==-4096)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(6,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(6,3:-1:1,'int16');
         elseif(x_tonec(l,j)==4096)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(1,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(1,3:-1:1,'int16');
         elseif(x_tonec(l,j)==12288)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(5,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(5,3:-1:1,'int16');
         elseif(x_tonec(l,j)==20480)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(3,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(3,3:-1:1,'int16');
         elseif(x_tonec(l,j)==28672)
-            xb((l-1)*38+j+1:(l-1)*38+j+3) = bitget(7,3:-1:1,'int16');
+            xb((l-1)*39+3*j-2:(l-1)*39+3*j) = bitget(7,3:-1:1,'int16');
         end
     end
 end
-
-%synthesis
-for j = 1:4
-    if(xMax(j)<=15)
-        x_maxd(j) = xMax(j)*32-1;
-    elseif(xMax(j)>=5&&xMax(j)<=23)
-        x_maxd(j) = xMax(j)*64-1;
-    elseif(xMax(j)>23&& xMax(j)<=31)
-        x_maxd(j) = floor((xMax(j)-1023)/128)+23;
-    elseif(xMax(j)>31 && xMax(j)<=39)
-        x_maxd(j) = floor((xMax(j)-2047)/256)+31;
-    elseif(xMax(j)>39 && xMax(j)<=47)
-        x_maxd(j) = xMax(j)*512-1;
-    elseif(xMax(j)>47&&xMax(j)<=55)
-        x_maxd(j) = xMax(j)*1024-1;
-    else
-        x_maxd(j) = xMax(j)*2048-1;
-    end
-end
-
-for l = 1:4
-    for j = 1:13
-        if(xb((l-1)*38+j+1) == 0 && xb((l-1)*38+j+2) == 0 && xb((l-1)*38+j+3) == 0)
-            x_toned(l,j)=-28672;
-        elseif(xb((l-1)*38+j+1) == 1 && xb((l-1)*38+j+2) == 0 && xb((l-1)*38+j+3) == 0)
-            x_toned(l,j)=-20480;
-        elseif(xb((l-1)*38+j+1) == 0 && xb((l-1)*38+j+2) == 1 && xb((l-1)*38+j+3) == 0)
-            x_toned(l,j)=-12288;
-        elseif(xb((l-1)*38+j+1) == 1 && xb((l-1)*38+j+2) == 1 && xb((l-1)*38+j+3) == 0)
-            x_toned(l,j)=-4096;
-        elseif(xb((l-1)*38+j+1) == 0 && xb((l-1)*38+j+2) == 0 && xb((l-1)*38+j+3) == 1)
-            x_toned(l,j)=4096;
-        elseif(xb((l-1)*38+j+1) == 1 && xb((l-1)*38+j+2) == 0 && xb((l-1)*38+j+3) == 1)
-            x_toned(l,j)=12288;
-        elseif(xb((l-1)*38+j+1) == 0 && xb((l-1)*38+j+2) == 1 && xb((l-1)*38+j+3) == 1)
-            x_toned(l,j)=20480;
-        elseif(xb((l-1)*38+j+1) == 1 && xb((l-1)*38+j+2) == 1 && xb((l-1)*38+j+3) == 1)
-            x_toned(l,j)=28672;
-        end
-    end
-end
-
-x_tone2 = x_tone./2^15;
-x_new = x_tone2'* x_max;
+%table 3.6 page 31
 % pairs of x_i(1:12)
 % xb(1:39) = -> x1(:)
 % xb(40:78) = -> x2(:)

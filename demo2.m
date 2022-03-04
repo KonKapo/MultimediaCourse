@@ -4,11 +4,11 @@ PrevFrmSTResd = zeros(1,160)';
 for i = 1:800
     s1 = frame(((i-1)*160+1:(i*160)));
     [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s1,PrevFrmSTResd);
-    %[s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmExFull,PrevFrmSTResd);
-    %e(i) = std(s1 - s0((i-1)*160+1:(i*160)));
-    %PrevFrmSTResd = CurrFrmSTResd';
+    [s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_decoder(FrmBitStrm, PrevFrmSTResd);
+    e(i) = std(s1 - s0((i-1)*160+1:(i*160)));
+    PrevFrmSTResd = CurrFrmSTResd';
 end
-audiowrite('car2.wav',s0,Fs)
+audiowrite('car3.wav',s0,Fs)
 figure(3)
 plot(s0)
 hold on

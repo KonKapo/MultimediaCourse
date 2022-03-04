@@ -38,6 +38,6 @@ pred(121:160)= b*pred(1+end-79-N:40+end-79-N);
 CurrFrmExFull(:) = CurrFrmSTResd - pred;
 std(CurrFrmExFull)
 % figure(1)
+% plot(CurrFrmSTResd, 'b')
 % hold on
-% plot(pred, 'b')
 end

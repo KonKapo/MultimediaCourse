@@ -21,6 +21,6 @@ pred(81:120)= b(3)*prevd(1+end-39-N(3):40+end-39-N(3));
 prevd = pred(1:120);
 pred(121:160)= b(4)*prevd(1+end-39-N(4):40+end-39-N(4));
 CurrFrmResd=CurrFrmExFull+pred;
-% plot(pred)
+% plot(CurrFrmResd+0.05)
 s0 = RPE_frame_ST_decoder(LARc, CurrFrmResd);
 end
