@@ -83,7 +83,87 @@ Mb = zeros(8,1); % 4 subframes with 2 bits each b46-b47 b102-b103 b158-b159 b214
 xMaxb = zeros(24,1); % 4 subframes with 6 bits each b48-b53 b104-b109 b160-b165 b216-b221
 xb = zeros(4*3*13,1); % 4 subframes with 13 pulses 3 bits each b54-b92 b110-b148 b166-b204 b222-b260
 
-LARb(1:6) = bitget(LARc(1),6:-1:1,'int16');
+%LARc(1)
+if(LARc(1)>0)
+    LARb(1) = 0;
+    LARb(2:6) = bitget(LARc(1),5:-1:1,'int16');
+elseif(LARc(1)==-32)
+    LARb(1:6) = bitget(-LARc(1),6:-1:1,'int16');
+else
+    LARb(1) = 1;
+    LARb(2:6) = bitget(-LARc(1),5:-1:1,'int16');
+end
+%LARc(2)
+if(LARc(2)>0)
+    LARb(7) = 0;
+    LARb(8:12) = bitget(LARc(2),5:-1:1,'int16');
+elseif(LARc(2)==-32)
+    LARb(7:12) = bitget(-LARc(2),6:-1:1,'int16');
+else
+    LARb(7) = 1;
+    LARb(8:12) = bitget(-LARc(2),5:-1:1,'int16');
+end
+%LARc(3)
+if(LARc(3)>0)
+    LARb(13) = 0;
+    LARb(14:17) = bitget(LARc(3),4:-1:1,'int16');
+elseif(LARc(3)==-16)
+    LARb(13:17) = bitget(-LARc(3),5:-1:1,'int16');
+else
+    LARb(13) = 1;
+    LARb(14:17) = bitget(-LARc(3),4:-1:1,'int16');
+end
+%LARc(4)
+if(LARc(4)>0)
+    LARb(18) = 0;
+    LARb(19:22) = bitget(LARc(4),4:-1:1,'int16');
+elseif(LARc(4)==-16)
+    LARb(18:22) = bitget(-LARc(4),5:-1:1,'int16');
+else
+    LARb(18) = 1;
+    LARb(19:22) = bitget(-LARc(4),4:-1:1,'int16');
+end
+%LARc(5)
+if(LARc(5)>0)
+    LARb(23) = 0;
+    LARb(24:26) = bitget(LARc(5),3:-1:1,'int16');
+elseif(LARc(5)==-8)
+    LARb(23:26) = bitget(-LARc(5),4:-1:1,'int16');
+else
+    LARb(23) = 1;
+    LARb(24:26) = bitget(-LARc(5),3:-1:1,'int16');
+end
+%LARc(6)
+if(LARc(6)>0)
+    LARb(27) = 0;
+    LARb(28:30) = bitget(LARc(6),3:-1:1,'int16');
+elseif(LARc(6)==-8)
+    LARb(27:30) = bitget(-LARc(6),4:-1:1,'int16');    
+else
+    LARb(27) = 1;
+    LARb(28:30) = bitget(-LARc(6),3:-1:1,'int16');
+end
+%LARc(7)
+if(LARc(7)>0)
+    LARb(31) = 0;
+    LARb(32:33) = bitget(LARc(7),2:-1:1,'int16');
+elseif(LARc(7)==-4)
+    LARb(31:33) = bitget(-LARc(7),3:-1:1,'int16'); 
+else
+    LARb(31) = 1;
+    LARb(32:33) = bitget(-LARc(7),2:-1:1,'int16');
+end
+%LARc(8)
+if(LARc(8)>0)
+    LARb(34) = 0;
+    LARb(35:36) = bitget(LARc(8),2:-1:1,'int16');
+elseif(LARc(7)==-4)
+    LARb(34:36) = bitget(-LARc(8),3:-1:1,'int16'); 
+else
+    LARb(34) = 1;
+    LARb(35:36) = bitget(-LARc(8),2:-1:1,'int16');
+end
+
 LARb(7:12) = bitget(LARc(2),6:-1:1,'int16');
 LARb(13:17) = bitget(LARc(3),5:-1:1,'int16');
 LARb(18:22) = bitget(LARc(4),5:-1:1,'int16');
