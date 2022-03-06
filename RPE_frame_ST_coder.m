@@ -42,26 +42,9 @@ for i=1:8
     end
 end
 
+
 % LARc
 if(~exist('PrevLARc','var') || isempty(PrevLARc))
-    for i=1:8
-        if(abs(r(i))<0.675)
-            LAR(i) = r(i);
-        elseif(abs(r(i))>=0.675 && abs(r(i))<0.975)
-            LAR(i)=sign(r(i))*(2*abs(r(i)) - 0.675);
-        else
-            LAR(i)=sign(r(i))*(8*abs(r(i)) - 6.375);
-        end
-        
-        z = A(i)*LAR(i)+B(i);
-        integ=abs(floor(z));
-        fract=abs(z)-abs(integ);
-        if(abs(fract)==0.5)
-            LARc(i) = z-sign(z)*0.5;
-        else
-            LARc(i)=round(z);
-        end
-    end
     
     % LARc
     for i=1:8
