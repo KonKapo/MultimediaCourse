@@ -36,7 +36,7 @@ b = QLB(bc(4)+1);
 %% 3.1.16 sub-segment number 4
 pred(121:160)= b*pred(1+end-79-N:40+end-79-N);
 CurrFrmExFull(:) = CurrFrmSTResd - pred;
-std(CurrFrmExFull)
+std(CurrFrmExFull);
 % figure(1)
 % plot(CurrFrmSTResd, 'b','LineWidth',1)
 % hold on
