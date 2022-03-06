@@ -135,6 +135,7 @@ for l = 1:4
     end
 end
 
+
 x_tone2 = x_toned./2^15;
 for j = 1:4
     xd(Mc(j)+40*(j-1):3:40*(j-1)+40-4+Mc(j)) = x_tone2(j,:)* x_maxd(j);
@@ -142,5 +143,4 @@ end
 x = xd./2^13;
 plot(x)
 [s0, CurrFrmResd] = RPE_frame_SLT_decoder(LARc,Nc,bc,x', PrevFrmResd);
-
 end
