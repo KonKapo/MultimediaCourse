@@ -37,9 +37,9 @@ b = QLB(bc(4)+1);
 pred(121:160)= b*pred(1+end-79-N:40+end-79-N);
 CurrFrmExFull(:) = CurrFrmSTResd - pred;
 std(CurrFrmExFull)
-figure(1)
-plot(CurrFrmSTResd, 'b','LineWidth',1)
-hold on
-plot(pred, 'r','LineWidth',1)
-legend('CurrFrmSTResd','prediction')
+% figure(1)
+% plot(CurrFrmSTResd, 'b','LineWidth',1)
+% hold on
+% plot(pred, 'r','LineWidth',1)
+% legend('CurrFrmSTResd','prediction')
 end
