@@ -10,6 +10,9 @@ LAR = zeros(8,1);
 LARc = zeros(8,1);
 A = [20 20 20 20 13.637 15 8.334 8.824];
 B = [0 0 4 -5 0.184 -3.5 -0.666 -2.235];
+LARcmin = [-32 -32 -16 -16 -8 -8 -4 -4];
+LARcmax = [31 31 15 15 7 7 3 3];
+
 
 %% ACF, R and r estimations
 
@@ -31,7 +34,10 @@ for i=1:8
     else
         LAR(i)=sign(r(i))*(8*abs(r(i)) - 6.375);
     end
-    
+%     LAR(i) = log10((1+r(i))/(1-r(i)));
+%     if(abs(r(i))>0.675)
+%         s = 'bike'
+%     end
     z = A(i)*LAR(i)+B(i);
     integ=abs(floor(z));
     fract=abs(z)-abs(integ);
@@ -40,12 +46,16 @@ for i=1:8
     else
         LARc(i)=round(z);
     end
+    if(LARc(i)<LARcmin(i))
+        LARc(i) = LARcmin(i);
+    elseif(LARc(i)>LARcmax(i))
+        LARc(i) = LARcmax(i);
+    end
 end
 
 
 % LARc
-if(~exist('PrevLARc','var') || isempty(PrevLARc))
-    
+if(~exist('PrevLARc','var') || isempty(PrevLARc))  
     % LARc
     for i=1:8
         z = LARc;
