@@ -160,7 +160,6 @@ else
     LARb(34) = 1;
     LARb(35:36) = bitget(-LARc(8),2:-1:1,'int16');
 end
-<<<<<<< HEAD
 Mc=Mc-1;
 LARb(7:12) = bitget(LARc(2),6:-1:1,'int16');
 LARb(13:17) = bitget(LARc(3),5:-1:1,'int16');
@@ -169,9 +168,7 @@ LARb(23:26) = bitget(LARc(5),4:-1:1,'int16');
 LARb(27:30) = bitget(LARc(6),4:-1:1,'int16');
 LARb(31:33) = bitget(LARc(7),3:-1:1,'int16');
 LARb(34:36) = bitget(LARc(8),3:-1:1,'int16');
-=======
 
->>>>>>> 3a6aa4293475efd022f4ec87be4f2abf13a530fe
 Nb(1:7) = bitget(Nc(1),7:-1:1,'int16');
 Nb(8:14) = bitget(Nc(2),7:-1:1,'int16');
 Nb(15:21) = bitget(Nc(3),7:-1:1,'int16');
