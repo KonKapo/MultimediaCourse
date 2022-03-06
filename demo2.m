@@ -1,7 +1,9 @@
-[frame, Fs] = audioread('car.wav');
-s0 = zeros(800*160,1);
+[frame, Fs] = audioread('audiosample3.wav');
+l = length(frame);
+n=floor(l/160);
+s0 = zeros(n*160,1);
 PrevFrmSTResd = zeros(1,160)';
-for i = 1:800
+for i = 1:n
     s1 = frame(((i-1)*160+1:(i*160)));
     [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s1,PrevFrmSTResd);
     [s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_decoder(FrmBitStrm, PrevFrmSTResd);
