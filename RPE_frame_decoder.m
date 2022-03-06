@@ -1,9 +1,8 @@
 function [s0, CurrFrmResd] = RPE_frame_decoder(FrmBitStrm, PrevFrmResd)
-H = [-134 -374 0 2054 5471 8192 5471 2054 0 -374 -134];
-H = H./2^13;
+
 % FrmBitStrm=[LARb'...
-%     Nb(1:7)' bb(1:2)' Mb(1:2)' xMaxb(1:6)' xb(1:39)'...
-%     Nb(8:14)' bb(3:4)' Mb(3:4)' xMaxb(7:12)' xb(40:78)'...
+%     Nb(1:7)'   bb(1:2)' Mb(1:2)' xMaxb(1:6)'   xb(1:39)'...
+%     Nb(8:14)'  bb(3:4)' Mb(3:4)' xMaxb(7:12)'  xb(40:78)'...
 %     Nb(15:21)' bb(5:6)' Mb(5:6)' xMaxb(13:18)' xb(79:117)'...
 %     Nb(22:28)' bb(7:8)' Mb(7:8)' xMaxb(19:24)' xb(118:156)']
 LARc = zeros(8,1);
@@ -152,24 +151,12 @@ for l = 1:4
     end
 end
 
+
 x_tone2 = x_toned./2^15;
-Mc;
 for j = 1:4
     x_new(j,:) = x_tone2(j,:)* x_maxd(j);
     xd(Mc(j)+40*(j-1):3:40*(j-1)+40-4+Mc(j)) = x_new(j,:);
 end
-% for j =0:3
-%     for k = 1:40
-%         for i = 1:11
-%             if(k+6-i>40 || k+6-i<1)
-%                 
-%             else
-%                 x(k+40*j) = x(k+40*j) + H(i)*xd(40*j+k+6-i);
-%             end
-%         end
-%     end
-% end
 x = xd./2^13;
 [s0, CurrFrmResd] = RPE_frame_SLT_decoder(LARc,Nc,bc,x', PrevFrmResd);
-
 end
