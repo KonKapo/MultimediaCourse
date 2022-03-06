@@ -1,9 +1,11 @@
 function [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s0,PrevFrmResd)
 [LARc, Nc,bc,CurrFrmExFull, CurrFrmResd] = RPE_frame_SLT_coder(s0,PrevFrmResd); %na fygei
-
+x_tone = zeros(4,13);
 e = CurrFrmExFull;
+figure()
+plot(e)
+hold on
 H = [-134 -374 0 2054 5471 8192 5471 2054 0 -374 -134];
-%H = H / 2^13;
 x = zeros(160,1);
 Mc = zeros(4,1);
 xMax = zeros(4,1);
@@ -11,9 +13,7 @@ for j = 0:3
     xm = zeros(4,1);
     for k = 1:40
         for i = 1:11
-            if(k+6-i>40 || k+6-i<1)
-                
-            else
+            if(k+6-i<=40 && k+6-i>=1)
                 x(k+40*j) = x(k+40*j) + H(i)*e(40*j+k+6-i);
             end
         end
@@ -22,7 +22,7 @@ for j = 0:3
         %E_M
         xm(l)=sum(x(l+40*j:3:40*j+40-4+l).^2);
     end
-    [~, Mc(j+1)] = max(xm);
+    [~, Mc(j+1)] = (max(xm));
     xmax = ceil(max(abs(x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1))))));
     if(xmax>=0 && xmax<=511)
         x_maxc = floor((xmax)/32);
@@ -46,7 +46,7 @@ for j = 0:3
         x_maxc = floor((xmax-16383)/2048)+56;
         x_max = (x_maxc+1)*2048-1;
     end
-    x_tonei(:,j+1)=x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))';
+    %x_tonei(:,j+1)=x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))';
     x_tone(j+1,:) = x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))'/x_max;
     xMax(j+1) = x_maxc;
 end
@@ -138,7 +138,7 @@ if(LARc(6)>0)
     LARb(27) = 0;
     LARb(28:30) = bitget(LARc(6),3:-1:1,'int16');
 elseif(LARc(6)==-8)
-    LARb(27:30) = bitget(-LARc(6),4:-1:1,'int16');    
+    LARb(27:30) = bitget(-LARc(6),4:-1:1,'int16');
 else
     LARb(27) = 1;
     LARb(28:30) = bitget(-LARc(6),3:-1:1,'int16');
@@ -148,7 +148,7 @@ if(LARc(7)>0)
     LARb(31) = 0;
     LARb(32:33) = bitget(LARc(7),2:-1:1,'int16');
 elseif(LARc(7)==-4)
-    LARb(31:33) = bitget(-LARc(7),3:-1:1,'int16'); 
+    LARb(31:33) = bitget(-LARc(7),3:-1:1,'int16');
 else
     LARb(31) = 1;
     LARb(32:33) = bitget(-LARc(7),2:-1:1,'int16');
@@ -158,12 +158,12 @@ if(LARc(8)>0)
     LARb(34) = 0;
     LARb(35:36) = bitget(LARc(8),2:-1:1,'int16');
 elseif(LARc(7)==-4)
-    LARb(34:36) = bitget(-LARc(8),3:-1:1,'int16'); 
+    LARb(34:36) = bitget(-LARc(8),3:-1:1,'int16');
 else
     LARb(34) = 1;
     LARb(35:36) = bitget(-LARc(8),2:-1:1,'int16');
 end
-
+Mc=Mc-1;
 LARb(7:12) = bitget(LARc(2),6:-1:1,'int16');
 LARb(13:17) = bitget(LARc(3),5:-1:1,'int16');
 LARb(18:22) = bitget(LARc(4),5:-1:1,'int16');
@@ -209,12 +209,7 @@ for l = 1:4
         end
     end
 end
-%table 3.6 page 31
-% pairs of x_i(1:12)
-% xb(1:39) = -> x1(:)
-% xb(40:78) = -> x2(:)
-% xb(79:117) = -> x3(:)
-% xb(118:156) = -> x4(:)
+
 
 FrmBitStrm=[LARb'...
     Nb(1:7)' bb(1:2)' Mb(1:2)' xMaxb(1:6)' xb(1:39)'...

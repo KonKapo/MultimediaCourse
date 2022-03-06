@@ -1,4 +1,4 @@
-[frame, Fs] = audioread('audiosample3.wav');
+[frame, Fs] = audioread('car.wav');
 l = length(frame);
 n=floor(l/160);
 s0 = zeros(n*160,1);
@@ -11,12 +11,12 @@ for i = 1:n
     PrevFrmSTResd = CurrFrmSTResd';
 end
 audiowrite('car3.wav',s0,Fs)
-figure(3)
-plot(s0)
-hold on
-plot(frame(1:800*160))
-legend('s0','frame')
-title('Decoded signal and frame comparison')
-e = s0 - frame(1:800*160);
-figure()
-stem(e)
+% figure(3)
+% plot(s0)
+% hold on
+% plot(frame(1:800*160))
+% legend('s0','frame')
+% title('Decoded signal and frame comparison')
+% e = s0 - frame(1:800*160);
+% figure()
+% stem(e)
