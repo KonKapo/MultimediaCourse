@@ -23,7 +23,6 @@ R = ACF(1:end-1);
 R = toeplitz(R);
 r = ACF(2:end)';
 w = mldivide(R,r);
-r2=w;
 r = poly2rc([1 -w(1) -w(2) -w(3) -w(4) -w(5) -w(6) -w(7) -w(8)]);
 
 for i=1:8
@@ -34,10 +33,7 @@ for i=1:8
     else
         LAR(i)=sign(r(i))*(8*abs(r(i)) - 6.375);
     end
-%     LAR(i) = log10((1+r(i))/(1-r(i)));
-%     if(abs(r(i))>0.675)
-%         s = 'bike'
-%     end
+
     z = A(i)*LAR(i)+B(i);
     integ=abs(floor(z));
     fract=abs(z)-abs(integ);
@@ -126,10 +122,10 @@ else
     end
 end
 CurrFrmSTResd = frame-s_pred';
-figure()
-plot(frame,'b', 'LineWidth',1)
-hold on
-plot(s_pred, 'r', 'LineWidth',1)
-legend('frame','prediction')
+% figure()
+% plot(frame,'b', 'LineWidth',1)
+% hold on
+% plot(s_pred, 'r', 'LineWidth',1)
+% legend('frame','prediction')
 end
 

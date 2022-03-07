@@ -17,7 +17,7 @@ for i = 1:n
     [s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmExFull,PrevFrmSTResd);
     PrevFrmSTResd = CurrFrmSTResd';
 end
-audiowrite('car4.wav',s0,Fs)
+audiowrite('car2.wav',s0,Fs)
 
 figure(3)
 plot(s0, 'LineWidth',1)
