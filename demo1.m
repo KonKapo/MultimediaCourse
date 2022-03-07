@@ -1,46 +1,47 @@
 [frame, Fs] = audioread('car.wav');
 % [frame, Fs] = audioread('audiosample3.wav');
-frame = frame .*100;
 l = length(frame);
 n=floor(l/160);
 s0 = zeros(n*160,1);
 L = zeros(n,8);
+ek = zeros(n,1);
+cfs = zeros(n,1);
 for i = 1:n
     [LARc, CurrFrmSTResd] = RPE_frame_ST_coder(frame((i-1)*160+1:(i*160)));
-%     errors(i)=std(CurrFrmExFull);
     s0((i-1)*160+1:(i*160)) = RPE_frame_ST_decoder(LARc, CurrFrmSTResd);
+    ek(i) = std(s0((i-1)*160+1:(i*160))-frame((i-1)*160+1:(i*160)));
+    cfs(i)=std(frame((i-1)*160+1:(i*160)));
     L(i,:) = LARc;
 end
-audiowrite('car2.wav',s0/max(abs(s0)),Fs)
+audiowrite('car2.wav',s0,Fs)
 
-figure(1)
-clf
-a = s0/max(abs(s0));
-plot(a,'r')
-hold on
-b = frame/max(abs(frame));
-plot(b,'c')
-legend('Reconstructed Signal s0','Initial Signal')
-title('Decoded Signal and Initial Signal comparison')
+% figure(1)
+% clf
+% a = s0/max(abs(s0));
+% plot(a,'r')
+% hold on
+% b = frame/max(abs(frame));
+% plot(b,'c')
+% legend('Reconstructed Signal s0','Initial Signal')
+% title('Decoded Signal and Initial Signal comparison')
+% 
+% e = frame/(max(abs((frame)))) - s0/(max(abs(s0)));
+% figure(2)
+% clf
+% plot(e)
+% legend('Reconstructed Signal - Initial Signal')
+% title('Normalised Reconstruction Error')
+% 
+% e2 = frame - s0;
+% figure(3)
+% clf
+% plot(e2)
+% legend('Reconstructed Signal - Initial Signal')
+% title('Reconstruction Error')
 
-e = frame/(max(abs((frame)))) - s0/(max(abs(s0)));
-figure(2)
-clf
-plot(e)
-legend('Reconstructed Signal - Initial Signal')
-title('Normalised Reconstruction Error')
-
-e2 = frame - s0;
-figure(3)
-clf
-plot(e2)
-legend('Reconstructed Signal - Initial Signal')
-title('Reconstruction Error')
-
-se = e/sqrt(length(s0));
 figure(4)
 clf
-plot(se)
+stem(ek)
 legend('Reconstructed Signal - Initial Signal')
 title('Reconstruction Standard Error')
 

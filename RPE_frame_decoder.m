@@ -98,18 +98,18 @@ xb = [FrmBitStrm(54:92) FrmBitStrm(110:148) FrmBitStrm(166:204) FrmBitStrm(222:2
 for j = 1:4
     if(xMax(j)<=15)
         x_maxd(j) = (xMax(j)+1)*32-1;
-    elseif(xMax(j)>=5&&xMax(j)<=23)
-        x_maxd(j) = (xMax(j)+1)*64-1;
+    elseif(xMax(j)>=15&&xMax(j)<=23)
+        x_maxd(j) = (xMax(j)-16)*64-1;
     elseif(xMax(j)>23&& xMax(j)<=31)
-        x_maxd(j) = (xMax(j)+1)*128-1;
+        x_maxd(j) = (xMax(j)-24)*128-1;
     elseif(xMax(j)>31 && xMax(j)<=39)
-        x_maxd(j) = (xMax(j)+1)*256-1;
+        x_maxd(j) = (xMax(j)-32)*256-1;
     elseif(xMax(j)>39 && xMax(j)<=47)
-        x_maxd(j) = (xMax(j)+1)*512;
+        x_maxd(j) = (xMax(j)-40)*512;
     elseif(xMax(j)>47&&xMax(j)<=55)
-        x_maxd(j) = (xMax(j)+1)*1024-1;
+        x_maxd(j) = (xMax(j)-48)*1024-1;
     else
-        x_maxd(j) = (xMax(j)+1)*2048-1;
+        x_maxd(j) = (xMax(j)-56)*2048-1;
     end
 end
 
@@ -141,6 +141,6 @@ for j = 1:4
     xd(Mc(j)+40*(j-1):3:40*(j-1)+40-4+Mc(j)) = x_tone2(j,:)* x_maxd(j);
 end
 x = xd./2^13;
-plot(x)
+% plot(x)
 [s0, CurrFrmResd] = RPE_frame_SLT_decoder(LARc,Nc,bc,x', PrevFrmResd);
 end

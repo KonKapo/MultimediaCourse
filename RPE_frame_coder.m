@@ -2,6 +2,9 @@ function [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s0,PrevFrmResd)
 [LARc, Nc,bc,CurrFrmExFull, CurrFrmResd] = RPE_frame_SLT_coder(s0,PrevFrmResd); %na fygei
 x_tone = zeros(4,13);
 e = CurrFrmExFull;
+% figure()
+% plot(e)
+% hold on
 H = [-134 -374 0 2054 5471 8192 5471 2054 0 -374 -134];
 x = zeros(160,1);
 Mc = zeros(4,1);
@@ -25,25 +28,30 @@ for j = 0:3
         x_maxc = floor((xmax)/32);
         x_max = (x_maxc+1)*32-1;
     elseif(xmax>=512 && xmax<=1023)
-        x_maxc = floor((xmax-511)/64)+16;
-        x_max = (x_maxc+1)*64-1;
+        d = floor((xmax-511)/64);
+        x_maxc = d+16;
+        x_max = d*64+512;
     elseif(xmax>=1024&& xmax<=2047)
-        x_maxc = floor((xmax-1023)/128)+24;
-        x_max = (x_maxc+1)*128-1;
+        d = floor((xmax-1023)/128);
+        x_maxc = d+24;
+        x_max = d*128+1024;
     elseif(xmax>=2048 && xmax<=4095)
-        x_maxc = floor((xmax-2047)/256)+32;
-        x_max = (x_maxc+1)*256-1;
+        d = floor((xmax-2047)/256);
+        x_maxc = d+32;
+        x_max = d*256+2048;
     elseif(xmax>=4096 && xmax<=8191)
-        x_maxc = floor((xmax-4095)/512)+40;
-        x_max = (x_maxc+1)*512-1;
+        d=floor((xmax-4095)/512);
+        x_maxc = d+40;
+        x_max = d*512+4096;
     elseif(xmax>=8192 && xmax<=16383)
-        x_maxc = floor((xmax-8191)/1024)+48;
-        x_max = (x_maxc+1)*1024-1;
+        d = floor((xmax-8191)/1024);
+        x_maxc = d+48;
+        x_max = d*1024+8192;
     elseif(xmax>=16384 && xmax<=32767)
-        x_maxc = floor((xmax-16383)/2048)+56;
-        x_max = (x_maxc+1)*2048-1;
+        d=floor((xmax-16383)/2048);
+        x_maxc = d+56;
+        x_max = d*2048+16384;
     end
-    %x_tonei(:,j+1)=x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))';
     x_tone(j+1,:) = x((Mc(j+1)+40*j:3:40*j+40-4+Mc(j+1)))'/x_max;
     xMax(j+1) = x_maxc;
 end
@@ -70,7 +78,6 @@ for l = 1:4
         end
     end
 end
-
 
 % 1.7 Bitstream sequence page 13
 LARb = zeros(36,1); % 8 LARs with 6 6 5 5 4 4 3 3 bits
