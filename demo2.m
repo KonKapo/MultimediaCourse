@@ -3,24 +3,37 @@ l = length(frame);
 n=floor(l/160);
 s0 = zeros(n*160,1);
 PrevFrmSTResd = zeros(1,160)';
-e = zeros(n,1);
+Nv = zeros(n*4,1);
+bv = zeros(n*4,1);
+errors = zeros(n,1);
 cfs = zeros(n,1);
 for i = 1:n
     s1 = frame(((i-1)*160+1:(i*160)));
-    [FrmBitStrm, CurrFrmResd] = RPE_frame_coder(s1,PrevFrmSTResd);
-    [s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_decoder(FrmBitStrm, PrevFrmSTResd);
-    e(i) = std(s1 - s0((i-1)*160+1:(i*160)));
-    cfs(i) = std(s1);
+    [LARc, Nc,bc,CurrFrmExFull, CurrFrmSTResd] = RPE_frame_SLT_coder(s1,PrevFrmSTResd);
+    errors(i)=std(CurrFrmExFull);
+    cfs(i)=std(CurrFrmSTResd);
+    Nv(i*4-3:i*4)=Nc;
+    bv(i*4-3:i*4)=bc;
+    [s0((i-1)*160+1:(i*160)), CurrFrmSTResd] = RPE_frame_SLT_decoder(LARc,Nc,bc, CurrFrmExFull,PrevFrmSTResd);
     PrevFrmSTResd = CurrFrmSTResd';
 end
-audiowrite('car3.wav',s0,Fs)
-figure()
-plot(s0)
+audiowrite('car4.wav',s0,Fs)
+
+figure(3)
+plot(s0, 'LineWidth',1)
 hold on
-plot(frame(1:800*160))
+plot(frame(1:n*160), 'LineWidth',1)
 legend('s0','frame')
 title('Decoded signal and frame comparison')
 figure()
-stem(e)
+stem(errors)
+title("Standard deviation of errors")
 figure()
-histogram(e.^2./cfs.^2)
+histogram(Nv)
+title("Pitch Estimation")
+figure()
+histogram(bv)
+title("b Estimation")
+figure()
+histogram(errors.^2./cfs.^2)
+title("Power of errors to power of d[n] ratio")

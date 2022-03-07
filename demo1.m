@@ -45,10 +45,10 @@ stem(ek)
 legend('Reconstructed Signal - Initial Signal')
 title('Reconstruction Standard Error')
 
-pRMS = rms(se).^2
+pRMS = rms(se).^2;
 % Power of the Reconstruction Standard Error
 % 3.2300e-08
-energy = sum(se.^2)
+energy = sum(se.^2);
 % Energy of the Reconstruction Standard Error
 % 0.0041
 

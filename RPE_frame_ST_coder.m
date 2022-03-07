@@ -126,5 +126,10 @@ else
     end
 end
 CurrFrmSTResd = frame-s_pred';
+figure()
+plot(frame,'b', 'LineWidth',1)
+hold on
+plot(s_pred, 'r', 'LineWidth',1)
+legend('frame','prediction')
 end
 
